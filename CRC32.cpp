@@ -23,16 +23,40 @@
 // =============================================================================
 
 
-#pragma once
+#include "CRC32.h"
 
 
-#include "Arduino.h"
-
-
-class CRC32 
-{
-public:
-    static uint32_t checksum(const uint8_t* data, size_t size);
-    static uint32_t update(uint32_t checksum, uint8_t data);
-    static uint32_t update(uint32_t checksum, const uint8_t* data, size_t size);
+PROGMEM static const uint32_t crc32_table[] = {
+    0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
+    0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
+    0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
+    0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c
 };
+
+
+uint32_t CRC32::checksum(const uint8_t* data, size_t size)
+{
+    return ~update(~0L, data, size);
+}
+
+
+uint32_t CRC32::update(uint32_t checksum, uint8_t data)
+{
+    // via http://forum.arduino.cc/index.php?topic=91179.0
+    uint8_t tbl_idx;
+
+    tbl_idx = checksum ^ (data >> (0 * 4));
+    checksum = pgm_read_dword_near(crc32_table + (tbl_idx & 0x0f)) ^ (checksum >> 4);
+    tbl_idx = checksum ^ (data >> (1 * 4));
+    checksum = pgm_read_dword_near(crc32_table + (tbl_idx & 0x0f)) ^ (checksum >> 4);
+
+    return checksum;
+}
+
+
+uint32_t CRC32::update(uint32_t checksum, const uint8_t* data, size_t size)
+{
+    while(size--) checksum = update(checksum, *data++);
+
+    return checksum;
+}
