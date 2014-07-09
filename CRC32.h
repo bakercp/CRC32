@@ -44,7 +44,7 @@ class CRC32
 public:
     static uint32_t checksum(const uint8_t* data, size_t size)
     {
-        return ~update(0, data, size);
+        return ~update(~0L, data, size);
     }
 
     static uint32_t update(uint32_t checksum, uint8_t data)
