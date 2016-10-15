@@ -1,6 +1,6 @@
 // =============================================================================
 //
-// Copyright (c) 2013 Christopher Baker <http://christopherbaker.net>
+// Copyright (c) 2013-2016 Christopher Baker <http://christopherbaker.net>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@
 #include "Arduino.h"
 
 
-class CRC32 
+class CRC32
 {
 public:
     static uint32_t checksum(const uint8_t* data, size_t size);
