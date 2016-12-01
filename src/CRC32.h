@@ -22,17 +22,45 @@
 //
 // =============================================================================
 
+#ifndef CRC32_H
+#define CRC32_H
 
-#pragma once
-
-
-#include "Arduino.h"
-
+#if defined(SPARK) || defined(PARTICLE)
+    #include "application.h"
+#elif defined(ARDUINO)
+    #if ARDUINO >= 100
+        #include "Arduino.h"
+    #else
+        #include "WProgram.h"
+    #endif
+#endif
 
 class CRC32
 {
 public:
+  static uint32_t calculate(const void* data, size_t size);
+
+public:
+  CRC32() { reset(); }
+
+  void reset();
+  void update(uint8_t data);
+  void update(const void* data, size_t size);
+  uint32_t finalize(const void* data, size_t size);
+  uint32_t finalize() const;
+
+    // Deprecated API
+    __attribute__ ((deprecated))
     static uint32_t checksum(const uint8_t* data, size_t size);
+
+    __attribute__ ((deprecated))
     static uint32_t update(uint32_t checksum, uint8_t data);
+
+    __attribute__ ((deprecated))
     static uint32_t update(uint32_t checksum, const uint8_t* data, size_t size);
+
+private:
+  uint32_t state;
 };
+
+#endif

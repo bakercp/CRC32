@@ -10,9 +10,9 @@ CRC32	KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-
-checksum	KEYWORD2
+calculate	KEYWORD2
 update	KEYWORD2
+finalize	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
