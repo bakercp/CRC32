@@ -26,29 +26,45 @@
 
 void setup()
 {
+  // Begin serial output for testing / debugging.
   Serial.begin(115200);
 }
 
 void loop()
 {
-  uint8_t buff[] = "Hello World";
-  int len = sizeof(buff)-1;
-  uint32_t checksum;
-  
-  checksum = CRC32::calculate(buff, len);
-  Serial.print(F("Calculated1: 0x")); Serial.println(checksum, HEX);
+  // The known CRC32 Checksum for the "Hello World" string below.
+  const uint32_t KNOWN_CHECKSUM = 0x4A17B156;
 
+  // Create some test data. This is an array of arbitrary bytes.
+  // For this test, we'll create an array of bytes representing text.
+  uint8_t byteBuffer[] = "Hello World";
+  size_t numBytes = sizeof(byteBuffer) - 1;
+
+  // Create a CRC32 checksum calculator.
   CRC32 crc;
-  for (int i = 0; i < len; i++) {
-    crc.update(buff[i]);
+
+  // Here we add each byte to the checksum, caclulating the checksum as we go.
+  for (size_t i = 0; i < numBytes; i++)
+  {
+    crc.update(byteBuffer[i]);
   }
-  checksum = crc.finalize();
-  Serial.print(F("Calculated2: 0x")); Serial.println(checksum, HEX);
 
-  Serial.print(F("      Known: 0x4A17B156"));
-  Serial.println();
-  Serial.println();
+  // Alternatively, we can add an array of bytes in bulk.
+  // crc.update(byteBuffer, numBytes);
 
+  // Once we have added all of the data, generate the final CRC32 checksum.
+  uint32_t checksum = crc.finalize();
+
+  if (checksum == KNOWN_CHECKSUM)
+  {
+    Serial.println(F("TEST PASSED"));
+  }
+  else
+  {
+    Serial.println(F("TEST FAILED"));
+  }
+
+  // Wait a little bit because this is just a test.
   delay(3000);
-}
 
+}
