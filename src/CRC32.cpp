@@ -49,7 +49,7 @@ uint32_t CRC32::calculate(const void* data, size_t size)
 
 void CRC32::reset()
 {
-  checksum = ~0L;
+  state = ~0L;
 }
 
 void CRC32::update(uint8_t data)
@@ -57,10 +57,10 @@ void CRC32::update(uint8_t data)
   // via http://forum.arduino.cc/index.php?topic=91179.0
   uint8_t tbl_idx;
 
-  tbl_idx = checksum ^ (data >> (0 * 4));
-  checksum = FLASH_READ_DWORD(crc32_table + (tbl_idx & 0x0f)) ^ (checksum >> 4);
-  tbl_idx = checksum ^ (data >> (1 * 4));
-  checksum = FLASH_READ_DWORD(crc32_table + (tbl_idx & 0x0f)) ^ (checksum >> 4);
+  tbl_idx = state ^ (data >> (0 * 4));
+  state = FLASH_READ_DWORD(crc32_table + (tbl_idx & 0x0f)) ^ (state >> 4);
+  tbl_idx = state ^ (data >> (1 * 4));
+  state = FLASH_READ_DWORD(crc32_table + (tbl_idx & 0x0f)) ^ (state >> 4);
 }
 
 void CRC32::update(const void* data, size_t size)
@@ -79,5 +79,37 @@ uint32_t CRC32::finalize(const void* data, size_t size)
 
 uint32_t CRC32::finalize() const
 {
-  return ~checksum;
+  return ~state;
 }
+
+// Deprecated API
+
+uint32_t CRC32::checksum(const uint8_t* data, size_t size)
+{
+    CRC32 crc;
+    crc.update(data, size);
+    return crc.finalize();
+}
+
+
+uint32_t CRC32::update(uint32_t checksum, uint8_t data)
+{
+    // via http://forum.arduino.cc/index.php?topic=91179.0
+    uint8_t tbl_idx;
+
+    tbl_idx = checksum ^ (data >> (0 * 4));
+    checksum = pgm_read_dword_near(crc32_table + (tbl_idx & 0x0f)) ^ (checksum >> 4);
+    tbl_idx = checksum ^ (data >> (1 * 4));
+    checksum = pgm_read_dword_near(crc32_table + (tbl_idx & 0x0f)) ^ (checksum >> 4);
+
+    return checksum;
+}
+
+
+uint32_t CRC32::update(uint32_t checksum, const uint8_t* data, size_t size)
+{
+    while(size--) checksum = update(checksum, *data++);
+
+    return checksum;
+}
+

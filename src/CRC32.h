@@ -49,8 +49,18 @@ public:
   uint32_t finalize(const void* data, size_t size);
   uint32_t finalize() const;
 
+    // Deprecated API
+    __attribute__ ((deprecated))
+    static uint32_t checksum(const uint8_t* data, size_t size);
+
+    __attribute__ ((deprecated))
+    static uint32_t update(uint32_t checksum, uint8_t data);
+
+    __attribute__ ((deprecated))
+    static uint32_t update(uint32_t checksum, const uint8_t* data, size_t size);
+
 private:
-  uint32_t checksum;
+  uint32_t state;
 };
 
 #endif
