@@ -22,34 +22,33 @@
 //
 // =============================================================================
 
-
 #include <CRC32.h>
-
 
 void setup()
 {
-    Serial.begin(115200);
+  Serial.begin(115200);
 }
-
 
 void loop()
 {
-    uint8_t buffer[10];
+  uint8_t buff[] = "Hello World";
+  int len = sizeof(buff)-1;
+  uint32_t checksum;
+  
+  checksum = CRC32::calculate(buff, len);
+  Serial.print(F("Calculated1: 0x")); Serial.println(checksum, HEX);
 
-    for (size_t i = 0; i < 10; ++i)
-    {
-        buffer[i] = i;
-    }
+  CRC32 crc;
+  for (int i = 0; i < len; i++) {
+    crc.update(buff[i]);
+  }
+  checksum = crc.finalize();
+  Serial.print(F("Calculated2: 0x")); Serial.println(checksum, HEX);
 
-    uint32_t checksum = CRC32::checksum(buffer, 10);
+  Serial.print(F("      Known: 0x4A17B156"));
+  Serial.println();
+  Serial.println();
 
-    uint32_t knownChecksum = 1164760902;
-
-    Serial.print("Calculated: ");
-    Serial.print(checksum);
-    Serial.print("     Known: ");
-    Serial.print(knownChecksum);
-    Serial.println();
-
-    delay(1000);
+  delay(3000);
 }
+
