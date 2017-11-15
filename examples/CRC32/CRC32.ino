@@ -1,33 +1,17 @@
-// =============================================================================
 //
-// Copyright (c) 2013-2016 Christopher Baker <http://christopherbaker.net>
+// Copyright (c) 2013 Christopher Baker <https://christopherbaker.net>
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// SPDX-License-Identifier:	MIT
 //
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
-// =============================================================================
+
 
 #include <CRC32.h>
+
 
 void setup()
 {
   // Begin serial output for testing / debugging.
-  Serial.begin(115200);
+  Serial.begin(9600);
 }
 
 void loop()
@@ -40,7 +24,7 @@ void loop()
   uint8_t byteBuffer[] = "Hello World";
   size_t numBytes = sizeof(byteBuffer) - 1;
 
-  // Create a CRC32 checksum calculator.
+  // Calculate a checksum one byte at a time.
   CRC32 crc;
 
   // Here we add each byte to the checksum, caclulating the checksum as we go.
@@ -48,9 +32,6 @@ void loop()
   {
     crc.update(byteBuffer[i]);
   }
-
-  // Alternatively, we can add an array of bytes in bulk.
-  // crc.update(byteBuffer, numBytes);
 
   // Once we have added all of the data, generate the final CRC32 checksum.
   uint32_t checksum = crc.finalize();
@@ -63,6 +44,21 @@ void loop()
   {
     Serial.println(F("TEST FAILED"));
   }
+
+  // Alternatively, we can calculate the checksum for the whole buffer. 
+
+  checksum = CRC32::calculate(byteBuffer, numBytes);
+
+  if (checksum == KNOWN_CHECKSUM)
+  {
+    Serial.println(F("TEST PASSED"));
+  }
+  else
+  {
+    Serial.println(F("TEST FAILED"));
+  }
+
+  Serial.println("Done.");
 
   // Wait a little bit because this is just a test.
   delay(3000);
