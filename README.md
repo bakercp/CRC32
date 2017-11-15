@@ -1,6 +1,8 @@
 CRC32
 =====
 
+[![Build Status](https://travis-ci.org/bakercp/CRC32.svg?branch=master)](https://travis-ci.org/bakercp/CRC32)
+
 ## Description
 
 An Arduino library for calculating a CRC32 checksum.
@@ -29,7 +31,7 @@ while (bytesRemain)
 {
     // Read a byte from arbitrary source.
     uint8_t byte = readAByteFromAStream();
-    
+
     // Add the byte to the checksum.
     crc.update(byte);
 }
