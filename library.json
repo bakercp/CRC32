@@ -5,7 +5,7 @@
   "keywords": "CRC32,checksum,error-detection, Arduino,Data Processing",
   "license": "MIT",
   "export": {
-    "include": ["src", "examples", "LICENSE.md","README.md"]
+    "include": ["src", "examples/CRC32", "LICENSE.md","README.md"]
   },
   "authors": {
     "name": "Christopher Baker",
