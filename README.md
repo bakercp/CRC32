@@ -66,7 +66,7 @@ See the included examples and tests for further usage examples.
 ## Compatible Implementations
 
 - Java / Processing
-    - [java.util.zip.CRC32](https://docs.oracle.com/javase/7/docs/api/java/util/zip/CRC32.html-
+    - [java.util.zip.CRC32](https://docs.oracle.com/javase/7/docs/api/java/util/zip/CRC32.html)
 - C++ / openFrameworks
     - [Poco::Checksum](https://pocoproject.org/docs/Poco.Checksum.html)
 
