@@ -1,21 +1,29 @@
 {
+  "$schema": "https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/schema/library.json",
   "name": "CRC32",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "An Arduino library for calculating a CRC32 checksum.",
-  "keywords": "CRC32,checksum,error-detection, Arduino,Data Processing",
+  "keywords": "CRC32,checksum,error-detection,Arduino,Data Processing",
   "license": "MIT",
   "export": {
-    "include": ["src", "examples/CRC32", "LICENSE.md","README.md"]
+    "include": ["src", "examples/CRC32", "LICENSE.md", "README.md"]
   },
   "authors": {
     "name": "Christopher Baker",
-    "url": "info@christopherbaker.net"
+    "email": "info@christopherbaker.net",
+    "maintainer": true
   },
+  "examples": [
+    {
+      "name": "CRC32",
+      "base": "examples/CRC32",
+      "files": ["CRC32.ino"]
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bakercp/CRC32.git"
   },
   "frameworks": "*",
-  "platforms": "*",
-  "private": true
+  "platforms": "*"
 }
