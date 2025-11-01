@@ -2,13 +2,7 @@
   "name": "CRC32",
   "version": "2.0.0",
   "description": "An Arduino library for calculating a CRC32 checksum.",
-  "keywords": [
-    "CRC32",
-    "checksum",
-    "error-detection",
-    "Arduino",
-    "Data Processing"
-  ],
+  "keywords": "CRC32,checksum,error-detection, Arduino,Data Processing",
   "export": {
     "include": ["src", "examples", "LICENSE.md","README.md","CRC32.h"]
   },
